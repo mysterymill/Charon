@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="Charon" id="Project-4eb" database="Sqlite" >
+	<comment><![CDATA[Model of Charon, an application for user and configuration management]]></comment>
+	<schema name="Default" >
+		<table name="domain" prior="Tbl" >
+			<column name="id" type="INTEGER" jt="4" mandatory="y" >
+				<identity><![CDATA[AUTOINCREMENT]]></identity>
+			</column>
+			<column name="name" type="VARCHAR" length="32" jt="12" mandatory="y" />
+			<column name="description" type="VARCHAR" length="256" jt="12" />
+			<column name="enabled" type="BOOLEAN" jt="-7" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+			</column>
+			<column name="parent" type="INTEGER" jt="4" mandatory="y" />
+			<index name="pk_domain" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_domain_domain" to_schema="Default" to_table="domain" delete_action="cascade" >
+				<fk_column name="parent" pk="id" />
+			</fk>
+		</table>
+	</schema>
+	<layout name="Default Layout" id="Layout-1811" show_relation="columns" >
+		<entity schema="Default" name="domain" color="C1D8EE" x="48" y="48" />
+	</layout>
+</project>
