@@ -21,11 +21,25 @@ diesel::table! {
         name -> Text,
         enabled -> Bool,
         creator_id -> Integer,
+        environment_id -> Integer,
         created -> Timestamp,
         updated -> Timestamp,
         description -> Nullable<Text>,
         parent_id -> Integer,
         owner_id -> Integer,
+    }
+}
+
+diesel::table! {
+    environment (id) {
+        id -> Nullable<Integer>,
+        name -> Text,
+        shorthand -> Text,
+        enabled -> Bool,
+        creator_id -> Integer,
+        created -> Timestamp,
+        updated -> Timestamp,
+        description -> Nullable<Text>,
     }
 }
 
@@ -43,9 +57,12 @@ diesel::table! {
 }
 
 diesel::joinable!(config -> user (creator_id));
+diesel::joinable!(domain -> environment (environment_id));
+diesel::joinable!(environment -> user (creator_id));
 
 diesel::allow_tables_to_appear_in_same_query!(
     config,
     domain,
+    environment,
     user,
 );
