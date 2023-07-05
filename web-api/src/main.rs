@@ -1,7 +1,6 @@
 use actix_web::{get, post, web, App, HttpResponse, HttpServer, Responder};
 
 mod http;
-mod access;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
