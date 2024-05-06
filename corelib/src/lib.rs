@@ -1,3 +1,6 @@
+mod access;
+mod global;
+
 pub fn add(left: usize, right: usize) -> usize {
     left + right
 }
