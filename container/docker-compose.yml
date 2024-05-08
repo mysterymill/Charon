@@ -1,0 +1,49 @@
+version: "0.1"
+services:
+  mariadb:
+    container_name: "winston-mariadb"
+    build: ./mariadb
+    ports:
+      - "3306:3306"
+    environment:
+      - MARIADB_ROOT_PASSWORD=$MARIADB_ROOT_PASSWORD
+      - APPDB=$APPDB
+      - APPDBUSER=$APPDBUSER
+      - APPDBPASSWORD=$APPDBPASSWORD
+    volumes:
+      - $HOME/mariadb/data:/data
+    healthcheck:
+        test: netstat -ltn | grep -c 7687
+        interval: 8s
+        timeout: 10s
+        retries: 5
+
+  app:
+    container_name: "winston-app"
+    build: ./app
+    environment:
+      - APPDB=$APPDB
+      - APPDBUSER=$APPDBUSER
+      - APPDBPASSWORD=$APPDBPASSWORD
+    depends_on:
+      neo4j:
+        condition: service_healthy
+
+  swagger: 
+    container_name: "winston-swagger"
+    image: "swaggerapi/swagger-ui"
+    environment:
+      - BASE_URL=/swagger
+      - SWAGGER_JSON_URL=${SWAGGER_PROTOCOL}://${PROXY_HOST}:${SWAGGER_PORT}/rest/openapi.json
+    depends_on:
+      - app
+
+  nginx:
+    container_name: "winston-nginx"
+    build: ./nginx
+    ports:
+      - "8080:8080"
+    depends_on:
+      - app
+      - swagger
+    
