@@ -6,10 +6,10 @@ services:
     ports:
       - "3306:3306"
     environment:
-      - MARIADB_ROOT_PASSWORD=$MARIADB_ROOT_PASSWORD
-      - APPDB=$APPDB
-      - APPDBUSER=$APPDBUSER
-      - APPDBPASSWORD=$APPDBPASSWORD
+      - MARIADB_ROOT_PASSWORD=$WINSTON_DB_ROOT_PASSWORD
+      - WINSTON_DB=$WINSTON_DB
+      - WINSTON_DB_USER=$WINSTON_DB_USER
+      - WINSTON_DB_PASSWORD=$WINSTON_DB_PASSWORD
     volumes:
       - $HOME/mariadb/data:/data
       - ./mariadb:/docker-entrypoint-initdb.d
@@ -22,9 +22,9 @@ services:
     container_name: "winston-app"
     build: ./app
     environment:
-      - APPDB=$APPDB
-      - APPDBUSER=$APPDBUSER
-      - APPDBPASSWORD=$APPDBPASSWORD
+      - WINSTON_DB=$WINSTON_DB
+      - WINSTON_DB_USER=$WINSTON_DB_USER
+      - WINSTON_DB_PASSWORD=$WINSTON_DB_PASSWORD
     depends_on:
       mariadb:
         condition: service_healthy
