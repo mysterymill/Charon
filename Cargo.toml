@@ -1,7 +1,17 @@
 
 [workspace]
 
+resolver = "2"
 members = [
-    "corelib",
-    "web-api",
+    "80_common",
+    "81_access",
+    "82_controller",
+    "85_cli",
+    "86_web-api",
 ]
+
+[profile.dev]
+opt-level = 0
+
+[profile.release]
+opt-level = 3

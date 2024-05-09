@@ -1,0 +1,6 @@
+#!/bin/bash
+
+mariadb -u root -p${MARIADB_ROOT_PASSWORD} -e "CREATE DATABASE ${APPDB} /*\!40100 DEFAULT CHARACTER SET utf8 */;"
+mariadb -u root -p${MARIADB_ROOT_PASSWORD} -e "CREATE USER ${APPDBUSER}@localhost IDENTIFIED BY '${APPDBPASSWORD}';"
+mariadb -u root -p${MARIADB_ROOT_PASSWORD} -e "GRANT ALL PRIVILEGES ON ${APPDB}.* TO '${APPDBUSER}'@'localhost';"
+mariadb -u root -p${MARIADB_ROOT_PASSWORD} -e "FLUSH PRIVILEGES;"

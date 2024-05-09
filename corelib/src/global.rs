@@ -1,1 +1,0 @@
-pub const ENV_KEY_DATABASE_URL: &str = "DATABASE_URL";
