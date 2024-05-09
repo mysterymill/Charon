@@ -37,9 +37,9 @@ cp -f nginx/nginx.conf.local nginx/nginx.conf
 
 echo "Setting temporary environment variables..."
 export MARIADB_ROOT_PASSWORD=DefaultR00tPwd
-export APPDB=winston
-export APPDBUSER=winston
-export APPDBPASSWORD=$(pwgen -Bs1 18)
+export WINSTONDB=winston
+export WINSTONDBUSER=winston
+export WINSTONDBPASSWORD=DefaultWinstonPwd
 
 echo "(Re-)building containers..."
 docker compose --project-name="winston" down --rmi all
@@ -48,6 +48,6 @@ docker compose --project-name="winston" up -d
 
 echo "Dropping temporary environment variables..."
 unset MARIADB_ROOT_PASSWORD
-unset APPDB
-unset APPDBUSER
-unset APPDBPASSWORD
+#unset WINSTONDB
+#unset WINSTONDBUSER
+#unset WINSTONDBPASSWORD
