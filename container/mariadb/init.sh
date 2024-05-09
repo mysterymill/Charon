@@ -1,13 +1,6 @@
 #!/bin/bash
 
-SEMAPHORE_FILE="/var/semaphore"
-
-if [ ! -f "$SEMAPHORE_FILE" ]; then
-    mysql -e "CREATE DATABASE ${APPDB} /*\!40100 DEFAULT CHARACTER SET utf8 */;"
-    mysql -e "CREATE USER ${APPDBUSER}@localhost IDENTIFIED BY '${APPDBPASSWORD}';"
-    mysql -e "GRANT ALL PRIVILEGES ON ${APPDB}.* TO '${APPDBUSER}'@'localhost';"
-    mysql -e "FLUSH PRIVILEGES;"
-    touch "$SEMAPHORE_FILE"
-fi
-
-tail -f /dev/null
+mariadb -u root -p${MARIADB_ROOT_PASSWORD} -e "CREATE DATABASE ${APPDB} /*\!40100 DEFAULT CHARACTER SET utf8 */;"
+mariadb -u root -p${MARIADB_ROOT_PASSWORD} -e "CREATE USER ${APPDBUSER}@localhost IDENTIFIED BY '${APPDBPASSWORD}';"
+mariadb -u root -p${MARIADB_ROOT_PASSWORD} -e "GRANT ALL PRIVILEGES ON ${APPDB}.* TO '${APPDBUSER}'@'localhost';"
+mariadb -u root -p${MARIADB_ROOT_PASSWORD} -e "FLUSH PRIVILEGES;"

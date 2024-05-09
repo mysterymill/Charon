@@ -11,6 +11,12 @@ do
     esac
 done
 
+if [ "release" == "$target" ] ; then
+    cargo build --release
+else
+    cargo build
+fi
+
 if [ $skipTests = false ] ; then
     echo "Launching tests..."
     (cd .. && exec cargo test)
@@ -25,8 +31,7 @@ else
     echo "Skipping tests"
 fi
 
-
-cp -f ../target/${target}/winston app/
+cp -f ../target/${target}/web-api app/
 cp -f .env.local .env
 cp -f nginx/nginx.conf.local nginx/nginx.conf
 
@@ -34,7 +39,7 @@ echo "Setting temporary environment variables..."
 export MARIADB_ROOT_PASSWORD=DefaultR00tPwd
 export APPDB=winston
 export APPDBUSER=winston
-export APPDBPASSWORD=pwgen -Bs1 18
+export APPDBPASSWORD=$(pwgen -Bs1 18)
 
 echo "(Re-)building containers..."
 docker compose --project-name="winston" down --rmi all

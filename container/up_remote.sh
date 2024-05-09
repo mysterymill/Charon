@@ -11,6 +11,13 @@ done
 
 git pull
 
+if [ "release" == "$target" ] ; then
+    cargo build --release
+else
+    cargo build
+fi
+
+
 if [ $skipTests = false ] ; then
     echo "Launching tests..."
     (cd .. && exec cargo test --release)
@@ -26,22 +33,23 @@ else
 fi
 
 (cd .. && exec cargo build --release)
-cp -f ../target/release/task_score app/
-cp -f .env.remote .env
-cp -f nginx/nginx.conf.remote nginx/nginx.conf
+cp -f ../target/${target}/web-api app/
+cp -f .env.local .env
+cp -f nginx/nginx.conf.local nginx/nginx.conf
 
 echo "Setting temporary environment variables..."
-export MARIADB_ROOT_PASSWORD=pwgen -Bs1 18
+export MARIADB_ROOT_PASSWORD=$(pwgen -Bs1 18)
 export APPDB=winston
 export APPDBUSER=winston
-export APPDBPASSWORD=pwgen -Bs1 18
+export APPDBPASSWORD=$(pwgen -Bs1 18)
 
 echo "(Re-)building containers..."
 docker compose --project-name="winston" down --rmi all
 docker compose --project-name="winston" build --no-cache
 docker compose --project-name="winston" up -d
 
-echo "!!!IMPORTANT!!! MariaDB root password is '${MARIADB_ROOT_PASSWORD}'. PLEASE REMEMBER THIS!"
+echo "Storing Mariadb root pwd in $HOME/mariadb.txt..."
+echo $MARIADB_ROOT_PASSWORD > $HOME/mariadb.txt
 echo "Dropping temporary environment variables..."
 unset MARIADB_ROOT_PASSWORD
 unset APPDB
