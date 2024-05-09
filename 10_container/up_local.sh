@@ -36,10 +36,10 @@ cp -f .env.local .env
 cp -f nginx/nginx.conf.local nginx/nginx.conf
 
 echo "Setting temporary environment variables..."
-export MARIADB_ROOT_PASSWORD=DefaultR00tPwd
-export WINSTONDB=winston
-export WINSTONDBUSER=winston
-export WINSTONDBPASSWORD=DefaultWinstonPwd
+export WINSTON_DB_ROOT_PASSWORD=DefaultR00tPwd
+export WINSTON_DB=winston
+export WINSTON_DB_USER=winston
+export WINSTON_DB_PASSWORD=DefaultWinstonPwd
 
 echo "(Re-)building containers..."
 docker compose --project-name="winston" down --rmi all
@@ -47,7 +47,7 @@ docker compose --project-name="winston" build --no-cache
 docker compose --project-name="winston" up -d
 
 echo "Dropping temporary environment variables..."
-unset MARIADB_ROOT_PASSWORD
-#unset WINSTONDB
-#unset WINSTONDBUSER
-#unset WINSTONDBPASSWORD
+unset WINSTON_DB_ROOT_PASSWORD
+#unset WINSTON_DB
+#unset WINSTON_DB_USER
+#unset WINSTON_DB_PASSWORD
