@@ -3,4 +3,5 @@
 
 members = [
     "corelib",
+    "web-api",
 ]
