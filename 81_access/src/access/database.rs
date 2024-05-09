@@ -56,4 +56,11 @@ mod tests {
         let db = Database::get_instance();
         assert_eq!(db.url, DB_TEST_URL.to_owned());
     }
+
+    #[test]
+    fn print_bcrypt_pw() {
+		//env::set_var(global::ENV_KEY_DATABASE_URL, DB_TEST_URL);
+		let pwd_hash_parts = bcrypt::hash("IchHasseMeinLeben", 12).unwrap();
+		print!("Pwd string: {}", pwd_hash_parts);
+    }
 }
