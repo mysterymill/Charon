@@ -1,21 +1,23 @@
-use diesel::mysql::MysqlConnection;
+use diesel::associations::HasTable;
+use diesel::{mysql::MysqlConnection, query_dsl::methods::LimitDsl};
 use diesel::r2d2::ConnectionManager;
+use diesel::prelude::*;
 use dotenv::dotenv;
 use r2d2::{Pool};
 use lazy_static::lazy_static; // 1.4.0
 use std::{sync::{Mutex, Arc}, env};
-use crate::global;
+use crate::{global, schema::user};
 
 lazy_static! {
 	static ref DATABASE_INSTANCE: Mutex<Arc<Database>> = Mutex::new(Arc::new(Database::new_from_env()));
 }
 
 // The SQLite-specific connection pool managing all database connections.
-pub type SQLitePool = Pool<ConnectionManager<MysqlConnection>>;
+pub type MySqlPool = Pool<ConnectionManager<MysqlConnection>>;
 
 pub struct Database {
 	url: String,
-	pool: SQLitePool,
+	pool: MySqlPool,
 }
 
 impl Database {
@@ -36,6 +38,13 @@ impl Database {
 
 	pub fn get_instance() -> Arc<Self> {
 		DATABASE_INSTANCE.lock().unwrap().clone()
+	}
+
+	pub fn load_all_users(&self) {
+		use crate::schema::user::dsl::*;
+
+		let connection = &mut self.pool.clone().get().unwrap();
+		let result: Result<Vec<user>, diesel::result::Error> = user::table().get_results(connection);
 	}
 }
 
